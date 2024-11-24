@@ -1,0 +1,331 @@
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: SignUpScreen(),
+    );
+  }
+}
+
+class SignUpScreen extends StatefulWidget {
+  @override
+  _SignUpScreenState createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  // 텍스트 필드 컨트롤러
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _idController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+
+  // 성별 선택 상태
+  String? _gender;
+  bool _isMale = false;
+  bool _isFemale = false;
+
+  // 연령대 선택 상태
+  bool _isTeen = false;
+  bool _isTwenties = false;
+  bool _isThirties = false;
+  bool _isForties = false;
+
+  // 아이디 중복 확인 상태
+  bool _idChecked = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          // 배경 이미지
+          Image.asset(
+            'assets/image/jaws.jpg',
+            fit: BoxFit.cover,
+          ),
+          // 회원가입 로고 텍스트를 화면 맨 위 가운데에 배치
+          Positioned(
+            top: 50, // 상단에서의 위치
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Text(
+                '회원가입',  // 로고로 사용할 텍스트
+                style: TextStyle(
+                  fontSize: 40,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+          // 회원가입 화면 내용
+          Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    SizedBox(height: 30), // 로고와 입력 필드 사이의 간격을 30으로 설정
+                    // 성명 입력 필드
+                    TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: '성명',
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.7),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    // 성별 선택 (남자/여자)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text('성별: ', style: TextStyle(color: Colors.black, fontSize: 16)),
+                        Row(
+                          children: [
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: _isMale,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _isMale = value!;
+                                      if (_isMale) _isFemale = false;
+                                    });
+                                  },
+                                ),
+                                Text('남자', style: TextStyle(color: Colors.black, fontSize: 16)),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: _isFemale,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _isFemale = value!;
+                                      if (_isFemale) _isMale = false;
+                                    });
+                                  },
+                                ),
+                                Text('여자', style: TextStyle(color: Colors.black, fontSize: 16)),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    // 연령대 선택 (10대, 20대, 30대, 40대)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text('연령대: ', style: TextStyle(color: Colors.black, fontSize: 16)),
+                        Row(
+                          children: [
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: _isTeen,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _isTeen = value!;
+                                    });
+                                  },
+                                ),
+                                Text('10대', style: TextStyle(color: Colors.black, fontSize: 16)),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: _isTwenties,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _isTwenties = value!;
+                                    });
+                                  },
+                                ),
+                                Text('20대', style: TextStyle(color: Colors.black, fontSize: 16)),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: _isThirties,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _isThirties = value!;
+                                    });
+                                  },
+                                ),
+                                Text('30대', style: TextStyle(color: Colors.black, fontSize: 16)),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Checkbox(
+                                  value: _isForties,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _isForties = value!;
+                                    });
+                                  },
+                                ),
+                                Text('40대', style: TextStyle(color: Colors.black, fontSize: 16)),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    // 아이디 입력 필드 + 아이디 중복 확인 버튼
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _idController,
+                            decoration: InputDecoration(
+                              labelText: '아이디',
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.7),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            // 아이디 중복 확인 버튼 클릭 시 동작
+                            print('아이디 중복 확인');
+                            setState(() {
+                              _idChecked = true;
+                            });
+                          },
+                          child: Text('중복 확인'),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    // 비밀번호 입력 필드
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: '비밀번호',
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.7),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    // 비밀번호 확인 입력 필드
+                    TextField(
+                      controller: _confirmPasswordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: '비밀번호 확인',
+                        filled: true,
+                        fillColor: Colors.white.withOpacity(0.7),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    // 전화번호 입력 필드 + 전화번호 인증 버튼
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _phoneController,
+                            decoration: InputDecoration(
+                              labelText: '전화번호',
+                              filled: true,
+                              fillColor: Colors.white.withOpacity(0.7),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        ElevatedButton(
+                          onPressed: () {
+                            // 전화번호 인증 버튼 클릭 시 동작
+                            print('전화번호 인증');
+                          },
+                          child: Text('전화번호 인증'),
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    // 회원가입 버튼
+                    ElevatedButton(
+                      onPressed: () {
+                        // 회원가입 버튼 클릭 시 동작
+                        print('회원가입 시도');
+                      },
+                      child: Text('회원가입'),
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          // 뒤로 가기 버튼
+          Positioned(
+            top: 50, // 위쪽에서 50만큼 위치
+            left: 20, // 왼쪽에서 20만큼 위치
+            child: GestureDetector(
+              onTap: () {
+                // 뒤로 가기 버튼 클릭 시 동작
+                Navigator.pop(context);  // 이전 화면으로 돌아가기
+              },
+              child: Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
